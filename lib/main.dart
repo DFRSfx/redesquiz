@@ -1,5 +1,6 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'score_manager.dart';
 import 'network_quiz.dart';
 import 'database_helper.dart';
@@ -214,7 +215,7 @@ class _UserNameDialogState extends State<UserNameDialog>
                           Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF4A9EFF).withOpacity(0.2),
+                              color: Color(0x334A9EFF),
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(
@@ -278,36 +279,40 @@ class _UserNameDialogState extends State<UserNameDialog>
                             width: double.infinity,
                             child: ElevatedButton.icon(
                               onPressed: () async {
-                                if (_usernameController.text
-                                    .trim()
-                                    .isNotEmpty) {
-                                  await ScoreManager.setCurrentUsername(
-                                    _usernameController.text.trim(),
-                                  );
-                                  if (mounted) {
-                                    Navigator.of(context).pushReplacement(
-                                      PageRouteBuilder(
-                                        pageBuilder:
-                                            (
-                                              context,
-                                              animation,
-                                              secondaryAnimation,
-                                            ) => const LevelSelectionScreen(),
-                                        transitionsBuilder: (
+                                if (_usernameController.text.trim().isEmpty) {
+                                  return;
+                                }
+
+                                // Store context in a local variable before async operation
+                                final currentContext = context;
+
+                                await ScoreManager.setCurrentUsername(
+                                  _usernameController.text.trim(),
+                                );
+
+                                if (!mounted) return;
+
+                                Navigator.of(currentContext).pushReplacement(
+                                  PageRouteBuilder(
+                                    pageBuilder:
+                                        (
                                           context,
                                           animation,
                                           secondaryAnimation,
-                                          child,
-                                        ) {
-                                          return FadeTransition(
-                                            opacity: animation,
-                                            child: child,
-                                          );
-                                        },
-                                      ),
-                                    );
-                                  }
-                                }
+                                        ) => const LevelSelectionScreen(),
+                                    transitionsBuilder: (
+                                      context,
+                                      animation,
+                                      secondaryAnimation,
+                                      child,
+                                    ) {
+                                      return FadeTransition(
+                                        opacity: animation,
+                                        child: child,
+                                      );
+                                    },
+                                  ),
+                                );
                               },
                               icon: const Icon(Icons.play_arrow),
                               label: const Text(
@@ -395,7 +400,7 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF4A9EFF).withOpacity(0.2),
+                        color: Color(0x334A9EFF),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Icon(
@@ -605,7 +610,7 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.2),
+                  color: color.withAlpha(26),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: color, size: 32),
@@ -671,7 +676,7 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF6366F1).withOpacity(0.2),
+                    color: Color(0x336366F1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Icon(
@@ -862,21 +867,24 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
   }
 
   void _finishQuiz() async {
+    // Store context before async operation
+    final currentContext = context;
+
     await ScoreManager.addToCurrentUserScore(_sessionScore);
 
-    if (mounted) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder:
-              (context) => QuizResultScreen(
-                level: widget.level,
-                sessionScore: _sessionScore,
-                totalQuestions: questions.length,
-                correctAnswers: _getCorrectAnswersCount(),
-              ),
-        ),
-      );
-    }
+    if (!mounted) return;
+
+    Navigator.of(currentContext).pushReplacement(
+      MaterialPageRoute(
+        builder:
+            (context) => QuizResultScreen(
+              level: widget.level,
+              sessionScore: _sessionScore,
+              totalQuestions: questions.length,
+              correctAnswers: _getCorrectAnswersCount(),
+            ),
+      ),
+    );
   }
 
   int _getCorrectAnswersCount() {
@@ -943,8 +951,8 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                           decoration: BoxDecoration(
                             color:
                                 _sessionScore >= 0
-                                    ? const Color(0xFF10B981).withOpacity(0.2)
-                                    : const Color(0xFFEF4444).withOpacity(0.2),
+                                    ? Color(0x3310B981)
+                                    : Color(0x33EF4444),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: AnimatedBuilder(
@@ -990,7 +998,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                                 vertical: 6,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF4A9EFF).withOpacity(0.2),
+                                color: Color(0x334A9EFF),
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: Text(
@@ -1069,12 +1077,10 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
                                                 color:
-                                                    buttonColor?.withOpacity(
-                                                      0.3,
+                                                    buttonColor?.withAlpha(
+                                                      77, // 255 * 0.3 ≈ 77
                                                     ) ??
-                                                    const Color(
-                                                      0xFF4A9EFF,
-                                                    ).withOpacity(0.3),
+                                                    const Color(0x334A9EFF),
                                               ),
                                               child: Center(
                                                 child: Text(
@@ -1235,34 +1241,38 @@ class QuizResultScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 32),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.popUntil(
-                                context,
-                                (route) => route.isFirst,
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blueGrey,
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.popUntil(
+                                  context,
+                                  (route) => route.isFirst,
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blueGrey,
+                              ),
+                              child: const Text('Menu Principal'),
                             ),
-                            child: const Text('Menu Principal'),
                           ),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => QuizScreen(level: level),
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: color,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => QuizScreen(level: level),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: color,
+                              ),
+                              child: const Text('Tentar Novamente'),
                             ),
-                            child: const Text('Tentar Novamente'),
                           ),
                         ],
                       ),
@@ -1491,8 +1501,8 @@ class _IpConverterScreenState extends State<IpConverterScreen> {
                   decoration: BoxDecoration(
                     color:
                         _result.startsWith('Erro:')
-                            ? Colors.red.withOpacity(0.1)
-                            : Colors.green.withOpacity(0.1),
+                            ? Colors.red.withAlpha(26) // 255 * 0.1 ≈ 26
+                            : Colors.green.withAlpha(26), // 255 * 0.1 ≈ 26
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color:
@@ -1579,8 +1589,9 @@ class _IpConverterScreenState extends State<IpConverterScreen> {
   int _getPrefixLength() {
     if (_usePrefix) {
       final prefix = int.parse(_maskOrPrefixController.text);
-      if (prefix < 0 || prefix > 32)
+      if (prefix < 0 || prefix > 32) {
         throw const FormatException('Prefixo inválido (0-32)');
+      }
       return prefix;
     } else {
       if (!_isValidSubnetMask(_maskOrPrefixController.text)) {
@@ -1717,8 +1728,8 @@ class _NetworkCheckScreenState extends State<NetworkCheckScreen> {
                   decoration: BoxDecoration(
                     color:
                         _checkResult.startsWith('✅')
-                            ? Colors.green.withOpacity(0.1)
-                            : Colors.red.withOpacity(0.1),
+                            ? Colors.green.withAlpha(26) // 255 * 0.1 ≈ 26
+                            : Colors.red.withAlpha(26), // 255 * 0.1 ≈ 26
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color:
