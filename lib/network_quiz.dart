@@ -1,10 +1,10 @@
 import 'dart:math';
 
-// Convert IP string to 32-bit integer
+/// Converte um endereço IP em string para inteiro de 32 bits.
 int ipToInt(String ip) =>
     ip.split('.').fold(0, (acc, octet) => (acc << 8) | int.parse(octet));
 
-// Convert 32-bit integer to IP string
+/// Converte um inteiro de 32 bits para string de IP.
 String intToIp(int ip) => [
   (ip >> 24) & 0xFF,
   (ip >> 16) & 0xFF,
@@ -12,7 +12,7 @@ String intToIp(int ip) => [
   ip & 0xFF,
 ].join('.');
 
-// Convert subnet mask to prefix length
+/// Converte máscara de sub-rede para notação de prefixo.
 int maskToPrefixLength(String mask) {
   final maskInt = ipToInt(mask);
   int count = 0;
@@ -24,33 +24,34 @@ int maskToPrefixLength(String mask) {
   return count;
 }
 
-// Convert prefix length to subnet mask
+/// Converte prefixo de sub-rede para máscara em string.
 String prefixLengthToMask(int prefixLength) {
   final mask = prefixLength == 0 ? 0 : (0xFFFFFFFF << (32 - prefixLength));
   return intToIp(mask);
 }
 
-// Get network address
+/// Retorna o endereço de rede (Network ID) dado um IP e prefixo.
 String getNetworkId(String ip, int prefixLength) {
   final ipInt = ipToInt(ip);
   final mask = prefixLength == 0 ? 0 : (0xFFFFFFFF << (32 - prefixLength));
   return intToIp(ipInt & mask);
 }
 
-// Get broadcast address
+/// Retorna o endereço de broadcast dado um IP e prefixo.
 String getBroadcastAddress(String ip, int prefixLength) {
   final ipInt = ipToInt(ip);
   final mask = prefixLength == 0 ? 0 : (0xFFFFFFFF << (32 - prefixLength));
   return intToIp(ipInt | (~mask & 0xFFFFFFFF));
 }
 
-// Check if two IPs are in the same network segment
+/// Verifica se dois IPs estão no mesmo segmento de rede.
 bool areInSameNetwork(String ip1, String ip2, int prefixLength) {
   final network1 = getNetworkId(ip1, prefixLength);
   final network2 = getNetworkId(ip2, prefixLength);
   return network1 == network2;
 }
 
+/// Classe que representa uma pergunta de redes.
 class NetworkQuestion {
   String question;
   String correctAnswer;
@@ -60,7 +61,9 @@ class NetworkQuestion {
   NetworkQuestion(this.question, this.correctAnswer, this.options, this.type);
 }
 
+/// Gerador de perguntas de quiz sobre redes IPv4.
 class NetworkQuizGenerator {
+  /// Gera perguntas para o nível especificado.
   List<NetworkQuestion> generateQuestionsForLevel(int level) {
     switch (level) {
       case 1:
@@ -76,12 +79,12 @@ class NetworkQuizGenerator {
 
   final Random random = Random();
 
-  // Level 1: Basic /8, /16, /24 networks
+  /// Nível 1: Perguntas básicas sobre redes /8, /16, /24.
   List<NetworkQuestion> generateLevel1Questions() {
     List<NetworkQuestion> questions = [];
     List<int> basicMasks = [8, 16, 24];
 
-    // Question 1: Network ID
+    // Pergunta 1: Network ID
     String ip1 = _generateRandomIP();
     int mask1 = basicMasks[random.nextInt(basicMasks.length)];
     String networkId = getNetworkId(ip1, mask1);
@@ -94,7 +97,7 @@ class NetworkQuizGenerator {
       ),
     );
 
-    // Question 2: Broadcast
+    // Pergunta 2: Broadcast
     String ip2 = _generateRandomIP();
     int mask2 = basicMasks[random.nextInt(basicMasks.length)];
     String broadcast = getBroadcastAddress(ip2, mask2);
@@ -107,7 +110,7 @@ class NetworkQuizGenerator {
       ),
     );
 
-    // Question 3: Same network
+    // Pergunta 3: Mesma rede
     var ips = _generateSmartRandomIPs(
       basicMasks[random.nextInt(basicMasks.length)],
     );
@@ -126,7 +129,7 @@ class NetworkQuizGenerator {
     return questions;
   }
 
-  // Level 2: Subnets with decimal masks
+  /// Nível 2: Sub-redes com máscaras decimais.
   List<NetworkQuestion> generateLevel2Questions() {
     List<NetworkQuestion> questions = [];
     List<Map<String, dynamic>> subnetMasks = [
@@ -141,7 +144,7 @@ class NetworkQuizGenerator {
     int prefix = maskInfo['prefix'];
     String mask = maskInfo['mask'];
 
-    // Question 1: Network ID with decimal mask
+    // Pergunta 1: Network ID com máscara decimal
     String ip1 = _generateRandomIP();
     String networkId = getNetworkId(ip1, prefix);
     questions.add(
@@ -153,7 +156,7 @@ class NetworkQuizGenerator {
       ),
     );
 
-    // Question 2: Broadcast with decimal mask
+    // Pergunta 2: Broadcast com máscara decimal
     String ip2 = _generateRandomIP();
     String broadcast = getBroadcastAddress(ip2, prefix);
     questions.add(
@@ -165,7 +168,7 @@ class NetworkQuizGenerator {
       ),
     );
 
-    // Question 3: Same network with decimal mask
+    // Pergunta 3: Mesma rede com máscara decimal
     var ips = _generateSmartRandomIPs(prefix);
     String ip3a = ips[0], ip3b = ips[1];
     bool sameNetwork = areInSameNetwork(ip3a, ip3b, prefix);
@@ -181,7 +184,7 @@ class NetworkQuizGenerator {
     return questions;
   }
 
-  // Level 3: Supernets
+  /// Nível 3: Super-redes.
   List<NetworkQuestion> generateLevel3Questions() {
     List<NetworkQuestion> questions = [];
     List<Map<String, dynamic>> supernetMasks = [
@@ -196,7 +199,7 @@ class NetworkQuizGenerator {
     int prefix = maskInfo['prefix'];
     String mask = maskInfo['mask'];
 
-    // Question 1: Network ID with supernet mask
+    // Pergunta 1: Network ID com máscara supernet
     String ip1 = _generateRandomIP();
     String networkId = getNetworkId(ip1, prefix);
     questions.add(
@@ -208,7 +211,7 @@ class NetworkQuizGenerator {
       ),
     );
 
-    // Question 2: Broadcast with supernet mask
+    // Pergunta 2: Broadcast com máscara supernet
     String ip2 = _generateRandomIP();
     String broadcast = getBroadcastAddress(ip2, prefix);
     questions.add(
@@ -220,7 +223,7 @@ class NetworkQuizGenerator {
       ),
     );
 
-    // Question 3: Same network with supernet mask
+    // Pergunta 3: Mesma super-rede
     var ips = _generateSmartRandomIPs(prefix);
     String ip3a = ips[0], ip3b = ips[1];
     bool sameNetwork = areInSameNetwork(ip3a, ip3b, prefix);
@@ -228,15 +231,15 @@ class NetworkQuizGenerator {
       NetworkQuestion(
         "Os IPs $ip3a e $ip3b estão na mesma super-rede com máscara $mask?",
         sameNetwork ? "Sim" : "Não",
-        ["Sim", "Não", "Apenas se for classe B", "Somente com roteamento"],
-        "Same Network",
+        ["Sim", "Não", "Apenas se for classe B", "Apenas com encaminhamento"],
+        "Mesma Rede",
       ),
     );
 
     return questions;
   }
 
-  // Helper methods to generate options
+  /// Métodos auxiliares para gerar opções e IPs.
   List<String> _generateNetworkIdOptions(
     String ip,
     int prefix,
@@ -249,7 +252,7 @@ class NetworkQuizGenerator {
       correctAnswer.lastIndexOf('.'),
     );
 
-    // Generate wrong options
+    // Gera opções erradas
     options.add(getNetworkId(_generateRandomIP(), prefix));
     options.add("$baseNetwork.1");
     options.add(_modifyLastOctet(correctAnswer, random.nextInt(254) + 1));
@@ -274,21 +277,20 @@ class NetworkQuizGenerator {
       correctAnswer.lastIndexOf('.'),
     );
 
-    // Generate wrong options
-    options.add(
-      getBroadcastAddress(_generateRandomIP(), prefix),
-    ); // Random IP same mask
-    options.add("$baseNetwork.0"); // Common wrong answer (network ID)
-    options.add(_modifyLastOctet(correctAnswer, -1)); // Previous address
+    // Gera opções erradas
+    options.add(getBroadcastAddress(_generateRandomIP(), prefix));
+    options.add("$baseNetwork.0");
+    options.add(_modifyLastOctet(correctAnswer, -1));
 
     if (isSupernet) {
-      options.add(getBroadcastAddress(ip, prefix - 1)); // Larger broadcast
+      options.add(getBroadcastAddress(ip, prefix - 1));
     }
 
     options.shuffle();
     return options.take(4).toList();
   }
 
+  /// Modifica o último octeto de um IP.
   String _modifyLastOctet(String ip, int change) {
     List<String> parts = ip.split('.');
     int lastOctet = int.parse(parts[3]) + change;
@@ -297,7 +299,7 @@ class NetworkQuizGenerator {
     return parts.join('.');
   }
 
-  // Keep existing helper methods (_generateRandomIP, _generateSmartRandomIPs)
+  /// Gera um IP aleatório.
   String _generateRandomIP() {
     return [
       random.nextInt(256),
@@ -307,6 +309,7 @@ class NetworkQuizGenerator {
     ].join('.');
   }
 
+  /// Gera dois IPs que podem ou não estar na mesma rede, dependendo do prefixo.
   List<dynamic> _generateSmartRandomIPs(int prefixLength) {
     final shouldBeSameNetwork = random.nextBool();
 

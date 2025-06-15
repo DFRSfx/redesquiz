@@ -1,13 +1,13 @@
 import 'database_helper.dart';
 
+/// Classe de utilitário para gerir o utilizador atual e as pontuações no quiz.
 class ScoreManager {
   static String? _currentUsername;
 
-  // Set current username (called from UserNameDialog)
+  /// Define o nome de utilizador atual e garante que existe na base de dados.
   static Future<void> setCurrentUsername(String username) async {
     _currentUsername = username;
-    
-    // Initialize user in database with score 0 if they don't exist
+    // Inicializa o utilizador na base de dados com score 0 se não existir
     final dbHelper = DatabaseHelper.instance;
     final currentScore = await dbHelper.getScore(username);
     if (currentScore == null) {
@@ -15,20 +15,19 @@ class ScoreManager {
     }
   }
 
-  // Get current username
+  /// Obtém o nome de utilizador atual.
   static String? getCurrentUsername() {
     return _currentUsername;
   }
 
-  // Get current user's score
+  /// Obtém a pontuação do utilizador atual.
   static Future<int> getCurrentUserScore() async {
     if (_currentUsername == null) return 0;
-    
     final dbHelper = DatabaseHelper.instance;
     return await dbHelper.getScore(_currentUsername!) ?? 0;
   }
 
-  // Update current user's score
+  /// Atualiza a pontuação do utilizador atual.
   static Future<void> updateCurrentUserScore(int score) async {
     if (_currentUsername != null) {
       final dbHelper = DatabaseHelper.instance;
@@ -36,7 +35,7 @@ class ScoreManager {
     }
   }
 
-  // Add to current user's score
+  /// Adiciona pontos à pontuação do utilizador atual.
   static Future<void> addToCurrentUserScore(int pointsToAdd) async {
     if (_currentUsername != null) {
       final dbHelper = DatabaseHelper.instance;
@@ -45,13 +44,15 @@ class ScoreManager {
     }
   }
 
-  // Get top scores
-  static Future<List<Map<String, dynamic>>> getTopScores({int limit = 5}) async {
+  /// Obtém as melhores pontuações.
+  static Future<List<Map<String, dynamic>>> getTopScores({
+    int limit = 5,
+  }) async {
     final dbHelper = DatabaseHelper.instance;
     return await dbHelper.getTopScores(limit: limit);
   }
 
-  // Clear current user (logout)
+  /// Limpa o utilizador atual (logout).
   static void clearCurrentUser() {
     _currentUsername = null;
   }
