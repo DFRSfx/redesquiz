@@ -9,7 +9,7 @@
 
 <br>  
 
-Uma aplicação educacional desenvolvida em Flutter para aprender conceitos de endereçamento IPv4 através de quizzes interativos.  
+Uma aplicação educacional desenvolvida em Flutter para aprender conceitos de endereçamento IPv4 através de quizzes interativos. No âmbito da Unidade Curricular de Programação de Dispositivos Móveis, Isla GAIA.
 
 ![Previsualização](https://media.discordapp.net/attachments/1383076662618488972/1383927279104819281/image.png?ex=68509237&is=684f40b7&hm=0c6330ee001e4df2f2f84fe394dc2b22177622e5210e1af065a0d5f8068353be&=&format=webp&quality=lossless&width=651&height=1421) 
 
