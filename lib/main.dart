@@ -4,27 +4,35 @@ import 'network_quiz.dart';
 import 'database_helper.dart';
 
 /// Função principal da aplicação
-/// Inicializa o Flutter binding e o banco de dados antes de executar o app
+/// Inicializa o Flutter binding e a base de dados antes de executar a aplicação
 void main() async {
   // Garante que o Flutter binding esteja inicializado antes de operações assíncronas
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Inicializa o banco de dados SQLite
+  // Inicializa a base de dados SQLite
   await initializeDatabase();
 
   // Executa a aplicação principal
   runApp(const NetworkQuizApp());
 }
 
-/// Inicializa o banco de dados da aplicação
-/// Cria uma instância do DatabaseHelper e inicializa o banco
+/// Inicializa a base de dados da aplicação
+/// Cria uma instância do DatabaseHelper e inicializa a base de dados
 Future<void> initializeDatabase() async {
   final dbHelper = DatabaseHelper.instance;
-  await dbHelper.database; // Inicializa o banco de dados
+  await dbHelper.database; // Inicializa a base de dados
 }
 
 /// Widget principal da aplicação
 /// Define o tema, configurações e rotas da aplicação
+///
+/// Este widget configura:
+/// - Tema escuro com cores azuis
+/// - Configurações da AppBar
+/// - Tema dos Cards com bordas arredondadas
+/// - Tema dos botões elevados
+/// - Esquema de cores para textos
+/// - Rotas de navegação da aplicação
 class NetworkQuizApp extends StatelessWidget {
   const NetworkQuizApp({super.key});
 
@@ -40,7 +48,7 @@ class NetworkQuizApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(
           0xFF0A0E27,
         ), // Azul escuro para o fundo
-        // Tema da AppBar
+        // Tema da AppBar com cor azul mais clara que o fundo
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFF1A1F3A), // Azul mais claro que o fundo
           foregroundColor: Colors.white,
@@ -48,7 +56,7 @@ class NetworkQuizApp extends StatelessWidget {
           centerTitle: true,
         ),
 
-        // Tema dos Cards
+        // Tema dos Cards com elevação e bordas personalizadas
         cardTheme: CardThemeData(
           color: const Color(0xFF1A1F3A),
           elevation: 8,
@@ -59,7 +67,7 @@ class NetworkQuizApp extends StatelessWidget {
           ),
         ),
 
-        // Tema dos botões elevados
+        // Tema dos botões elevados com cor azul clara
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF4A9EFF), // Azul claro
@@ -71,7 +79,7 @@ class NetworkQuizApp extends StatelessWidget {
           ),
         ),
 
-        // Tema dos textos
+        // Tema dos textos com diferentes tons de branco e azul
         textTheme: const TextTheme(
           bodyLarge: TextStyle(color: Colors.white),
           bodyMedium: TextStyle(color: Color(0xFFB8C6DB)), // Azul acinzentado
@@ -83,10 +91,10 @@ class NetworkQuizApp extends StatelessWidget {
         ),
       ),
 
-      // Tela inicial
+      // Ecrã inicial da aplicação
       home: const SplashScreen(),
 
-      // Definição das rotas da aplicação
+      // Definição das rotas da aplicação para navegação
       routes: {
         '/home': (context) => const LevelSelectionScreen(),
         '/quiz': (context) {
@@ -100,9 +108,14 @@ class NetworkQuizApp extends StatelessWidget {
   }
 }
 
-/// Tela de carregamento inicial (Splash Screen)
-/// Exibe o logo e nome da aplicação com animação
-/// Redireciona automaticamente para a tela de nome do usuário após 3 segundos
+/// Ecrã de carregamento inicial (Splash Screen)
+/// Exibe o logótipo e nome da aplicação com animação
+/// Redireciona automaticamente para o ecrã de nome do utilizador após 3 segundos
+///
+/// Funcionalidades:
+/// - Animação de escala para o conteúdo
+/// - Transição suave para o próximo ecrã
+/// - Indicador de carregamento visual
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -127,7 +140,7 @@ class _SplashScreenState extends State<SplashScreen>
     _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
     _controller.forward();
 
-    // Aguarda 3 segundos antes de navegar para a próxima tela
+    // Aguarda 3 segundos antes de navegar para o próximo ecrã
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
@@ -166,7 +179,7 @@ class _SplashScreenState extends State<SplashScreen>
 
               // Subtítulo descritivo
               Text(
-                'Aprenda endereçamento IP de forma interativa',
+                'Aprenda endereçamento IP de forma interactiva',
                 style: Theme.of(
                   context,
                 ).textTheme.bodyMedium?.copyWith(color: Colors.white70),
@@ -189,9 +202,15 @@ class _SplashScreenState extends State<SplashScreen>
   }
 }
 
-/// Dialog para captura do nome do usuário
-/// Primeira tela interativa que o usuário vê após o splash screen
-/// Permite inserir o nome do jogador e navegar para a seleção de níveis
+/// Diálogo para captura do nome do utilizador
+/// Primeiro ecrã interactivo que o utilizador vê após o splash screen
+/// Permite inserir o nome do jogador e navegar para a selecção de níveis
+///
+/// Características:
+/// - Fundo com gradiente linear
+/// - Animações de fade e slide
+/// - Validação do campo de entrada
+/// - Transição suave para o próximo ecrã
 class UserNameDialog extends StatefulWidget {
   const UserNameDialog({super.key});
 
@@ -232,7 +251,7 @@ class _UserNameDialogState extends State<UserNameDialog>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        // Fundo com gradiente
+        // Fundo com gradiente linear azul
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -255,7 +274,7 @@ class _UserNameDialogState extends State<UserNameDialog>
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          // Ícone decorativo
+                          // Ícone decorativo circular
                           Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
@@ -270,7 +289,7 @@ class _UserNameDialogState extends State<UserNameDialog>
                           ),
                           const SizedBox(height: 24),
 
-                          // Título
+                          // Título principal
                           const Text(
                             'Quiz de Redes IPv4',
                             style: TextStyle(
@@ -281,9 +300,9 @@ class _UserNameDialogState extends State<UserNameDialog>
                           ),
                           const SizedBox(height: 8),
 
-                          // Descrição
+                          // Descrição da aplicação
                           const Text(
-                            'Aprenda endereçamento IPv4 de forma interativa',
+                            'Aprenda endereçamento IPv4 de forma interactiva',
                             style: TextStyle(
                               fontSize: 16,
                               color: Color(0xFFB8C6DB),
@@ -292,7 +311,7 @@ class _UserNameDialogState extends State<UserNameDialog>
                           ),
                           const SizedBox(height: 32),
 
-                          // Campo de entrada do nome
+                          // Campo de entrada do nome do utilizador
                           TextField(
                             controller: _usernameController,
                             style: const TextStyle(color: Colors.white),
@@ -301,7 +320,7 @@ class _UserNameDialogState extends State<UserNameDialog>
                               labelStyle: const TextStyle(
                                 color: Color(0xFFB8C6DB),
                               ),
-                              hintText: 'Digite seu nome...',
+                              hintText: 'Digite o seu nome...',
                               hintStyle: const TextStyle(
                                 color: Color(0xFF6B7280),
                               ),
@@ -339,7 +358,7 @@ class _UserNameDialogState extends State<UserNameDialog>
                                 // Armazena o contexto antes da operação assíncrona
                                 final currentContext = context;
 
-                                // Salva o nome do usuário
+                                // Guarda o nome do utilizador
                                 await ScoreManager.setCurrentUsername(
                                   _usernameController.text.trim(),
                                 );
@@ -347,7 +366,7 @@ class _UserNameDialogState extends State<UserNameDialog>
                                 // Verifica se o widget ainda está montado
                                 if (!mounted) return;
 
-                                // Navega para a tela de seleção de níveis
+                                // Navega para o ecrã de selecção de níveis
                                 Navigator.of(currentContext).pushReplacement(
                                   PageRouteBuilder(
                                     pageBuilder:
@@ -403,9 +422,16 @@ class _UserNameDialogState extends State<UserNameDialog>
   }
 }
 
-/// Tela de seleção de níveis de dificuldade
-/// Permite ao usuário escolher entre 3 níveis diferentes de quiz
-/// Também fornece acesso a ferramentas auxiliares e visualização de scores
+/// Ecrã de selecção de níveis de dificuldade
+/// Permite ao utilizador escolher entre 3 níveis diferentes de quiz
+/// Também fornece acesso a ferramentas auxiliares e visualização de pontuações
+///
+/// Funcionalidades:
+/// - Três níveis de dificuldade com diferentes pontuações
+/// - Animações escalonadas para os cards
+/// - Acesso a ferramentas (conversor e verificador)
+/// - Navegação para pontuações e ranking
+/// - Interface com gradiente e elementos visuais atractivos
 class LevelSelectionScreen extends StatefulWidget {
   const LevelSelectionScreen({super.key});
 
@@ -445,7 +471,7 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        // Fundo com gradiente
+        // Fundo com gradiente linear
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -489,7 +515,7 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
                               color: Colors.white,
                             ),
                           ),
-                          // Exibe o nome do usuário atual
+                          // Exibe o nome do utilizador actual
                           FutureBuilder<String?>(
                             future: Future.value(
                               ScoreManager.getCurrentUsername(),
@@ -508,7 +534,7 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
                       ),
                     ),
 
-                    // Botões de navegação para score e ranking
+                    // Botões de navegação para pontuação e ranking
                     Row(
                       children: [
                         IconButton(
@@ -523,7 +549,7 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
                             Icons.person,
                             color: Color(0xFF4A9EFF),
                           ),
-                          tooltip: 'Meu Score',
+                          tooltip: 'Minha Pontuação',
                         ),
                         IconButton(
                           onPressed:
@@ -561,11 +587,11 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
                       ),
                       const SizedBox(height: 24),
 
-                      // Lista scrollável com os níveis e ferramentas
+                      // Lista deslizável com os níveis e ferramentas
                       Expanded(
                         child: ListView(
                           children: [
-                            // Nível 1: Básico
+                            // Nível 1: Básico - Conceitos fundamentais
                             AnimatedBuilder(
                               animation: _cardAnimations[0],
                               builder: (context, child) {
@@ -587,7 +613,7 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
                             ),
                             const SizedBox(height: 16),
 
-                            // Nível 2: Sub-redes
+                            // Nível 2: Sub-redes - Máscaras decimais
                             AnimatedBuilder(
                               animation: _cardAnimations[1],
                               builder: (context, child) {
@@ -609,7 +635,7 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
                             ),
                             const SizedBox(height: 16),
 
-                            // Nível 3: Super-redes
+                            // Nível 3: Super-redes - Agregação avançada
                             AnimatedBuilder(
                               animation: _cardAnimations[2],
                               builder: (context, child) {
@@ -649,6 +675,15 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
 
   /// Constrói um card para cada nível de dificuldade
   /// Inclui informações sobre pontuação, descrição e navegação para o quiz
+  ///
+  /// Parâmetros:
+  /// - [level]: Número do nível (1, 2 ou 3)
+  /// - [title]: Título do nível
+  /// - [subtitle]: Subtítulo descritivo
+  /// - [description]: Descrição detalhada do nível
+  /// - [color]: Cor temática do nível
+  /// - [points]: Sistema de pontuação
+  /// - [icon]: Ícone representativo
   Widget _buildLevelCard(
     BuildContext context, {
     required int level,
@@ -675,7 +710,7 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
                   secondaryAnimation,
                   child,
                 ) {
-                  // Animação de slide da direita para a esquerda
+                  // Animação de deslize da direita para a esquerda
                   return SlideTransition(
                     position: Tween<Offset>(
                       begin: const Offset(1.0, 0.0),
@@ -690,7 +725,7 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
           padding: const EdgeInsets.all(20),
           child: Row(
             children: [
-              // Ícone do nível
+              // Ícone do nível com fundo colorido
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -701,7 +736,7 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
               ),
               const SizedBox(width: 20),
 
-              // Informações do nível
+              // Informações detalhadas do nível
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -743,7 +778,7 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
                 ),
               ),
 
-              // Seta indicativa
+              // Seta indicativa para navegação
               Icon(Icons.arrow_forward_ios, color: color, size: 16),
             ],
           ),
@@ -754,6 +789,10 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
 
   /// Constrói o card de ferramentas auxiliares
   /// Inclui botões para conversor de IP e verificador de rede
+  ///
+  /// Ferramentas disponíveis:
+  /// - Conversor: Para conversão entre formatos de endereçamento
+  /// - Verificador: Para verificar se IPs estão na mesma rede
   Widget _buildToolsCard(BuildContext context) {
     return Card(
       child: Padding(
@@ -789,10 +828,10 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
             ),
             const SizedBox(height: 16),
 
-            // Botões das ferramentas
+            // Botões das ferramentas em linha
             Row(
               children: [
-                // Botão do conversor
+                // Botão do conversor de IPs
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed:
@@ -811,7 +850,7 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
                 ),
                 const SizedBox(width: 12),
 
-                // Botão do verificador
+                // Botão do verificador de redes
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed:
@@ -843,11 +882,19 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
   }
 }
 
-/// Tela principal do quiz
-/// Gerencia a lógica do jogo, exibição de perguntas, respostas e pontuação
+/// Ecrã principal do quiz
+/// Gere a lógica do jogo, exibição de perguntas, respostas e pontuação
 /// Inclui animações e feedback visual para as respostas
+///
+/// Funcionalidades principais:
+/// - Apresentação sequencial de perguntas
+/// - Sistema de pontuação baseado no nível de dificuldade
+/// - Feedback visual imediato para respostas
+/// - Animações de transição entre perguntas
+/// - Barra de progresso visual
+/// - Navegação para ecrã de resultados
 class QuizScreen extends StatefulWidget {
-  final int level; // Nível de dificuldade selecionado
+  final int level; // Nível de dificuldade seleccionado
 
   const QuizScreen({super.key, required this.level});
 
@@ -857,14 +904,14 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
   late List<NetworkQuestion> questions; // Lista de perguntas do quiz
-  int _currentQuestionIndex = 0; // Índice da pergunta atual
-  int _sessionScore = 0; // Pontuação da sessão atual
-  int? _selectedOptionIndex; // Índice da opção selecionada
+  int _currentQuestionIndex = 0; // Índice da pergunta actual
+  int _sessionScore = 0; // Pontuação da sessão actual
+  int? _selectedOptionIndex; // Índice da opção seleccionada
   bool _answered = false; // Se a pergunta foi respondida
   bool _showNextButton = false; // Se deve mostrar o botão "próximo"
-  bool _isCorrect = false; // Se a resposta está correta
+  bool _isCorrect = false; // Se a resposta está correcta
 
-  // Controladores de animação
+  // Controladores de animação para transições e feedback
   late AnimationController _fadeController;
   late AnimationController _scoreController;
   late Animation<double> _fadeAnimation;
@@ -891,15 +938,20 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
       CurvedAnimation(parent: _scoreController, curve: Curves.elasticOut),
     );
 
-    // Gera as perguntas para o nível selecionado
+    // Gera as perguntas para o nível seleccionado
     final generator = NetworkQuizGenerator();
     questions =
         generator.generateQuestionsForLevel(widget.level).take(5).toList();
     _fadeController.forward();
   }
 
-  /// Processa a resposta do usuário
-  /// Calcula a pontuação baseada no nível e na correção da resposta
+  /// Processa a resposta do utilizador
+  /// Calcula a pontuação baseada no nível e na correcção da resposta
+  ///
+  /// Sistema de pontuação:
+  /// - Nível 1: +10 pontos (correcto) / -5 pontos (incorrecto)
+  /// - Nível 2: +20 pontos (correcto) / -10 pontos (incorrecto)
+  /// - Nível 3: +30 pontos (correcto) / -15 pontos (incorrecto)
   void _answerQuestion(int selectedIndex) async {
     if (_answered) return; // Previne múltiplas respostas
 
@@ -907,12 +959,12 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
       _selectedOptionIndex = selectedIndex;
       _answered = true;
 
-      // Verificar se a resposta está correta
+      // Verificar se a resposta está correcta
       _isCorrect =
           questions[_currentQuestionIndex].options[selectedIndex] ==
           questions[_currentQuestionIndex].correctAnswer;
 
-      // Atualizar pontuação conforme enunciado
+      // Actualizar pontuação conforme especificação
       if (_isCorrect) {
         switch (widget.level) {
           case 1:
@@ -940,16 +992,16 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
       }
     });
 
-    // Feedback visual animado para resposta correta
+    // Feedback visual animado para resposta correcta
     if (_isCorrect) {
       await _scoreController.forward();
       await _scoreController.reverse();
     }
 
-    // Aguardar um tempo para o usuário ver o resultado
+    // Aguardar um tempo para o utilizador ver o resultado
     await Future.delayed(const Duration(milliseconds: 800));
 
-    // Mostrar o botão (tanto para correto quanto incorreto)
+    // Mostrar o botão (tanto para correcto quanto incorrecto)
     if (mounted) {
       setState(() {
         _showNextButton = true;
@@ -957,6 +1009,8 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
     }
   }
 
+  /// Avança para a próxima pergunta ou finaliza o quiz
+  /// Gere as transições entre perguntas e navegação final
   void _nextQuestion() {
     if (_currentQuestionIndex < questions.length - 1) {
       _fadeController.reset();
@@ -972,8 +1026,10 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
     }
   }
 
+  /// Finaliza o quiz e navega para o ecrã de resultados
+  /// Guarda a pontuação da sessão na base de dados
   void _finishQuiz() async {
-    // Store context before async operation
+    // Armazenar contexto antes da operação assíncrona
     final currentContext = context;
 
     await ScoreManager.addToCurrentUserScore(_sessionScore);
@@ -993,6 +1049,8 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
     );
   }
 
+  /// Calcula o número de respostas correctas baseado na pontuação
+  /// Utiliza a pontuação por nível para estimar acertos
   int _getCorrectAnswersCount() {
     return _sessionScore > 0 ? (_sessionScore / (widget.level * 10)).ceil() : 0;
   }
@@ -1014,12 +1072,14 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
         child: SafeArea(
           child: Column(
             children: [
+              // Cabeçalho com informações da sessão
               Container(
                 padding: const EdgeInsets.all(24),
                 child: Column(
                   children: [
                     Row(
                       children: [
+                        // Botão de voltar
                         IconButton(
                           onPressed: () => Navigator.of(context).pop(),
                           icon: const Icon(
@@ -1027,6 +1087,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                             color: Colors.white,
                           ),
                         ),
+                        // Informações de progresso
                         Expanded(
                           child: Column(
                             children: [
@@ -1039,6 +1100,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                                 ),
                               ),
                               const SizedBox(height: 8),
+                              // Barra de progresso visual
                               LinearProgressIndicator(
                                 value: progress,
                                 backgroundColor: const Color(0xFF2E3B6F),
@@ -1049,6 +1111,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                             ],
                           ),
                         ),
+                        // Indicador de pontuação actual
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 12,
@@ -1087,6 +1150,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                 ),
               ),
 
+              // Área principal da pergunta e opções
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(24),
@@ -1098,6 +1162,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // Etiqueta do tipo de pergunta
                             Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 12,
@@ -1118,6 +1183,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                             ),
                             const SizedBox(height: 16),
 
+                            // Texto da pergunta
                             Text(
                               question.question,
                               style: const TextStyle(
@@ -1129,6 +1195,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                             ),
                             const SizedBox(height: 24),
 
+                            // Lista de opções de resposta
                             Expanded(
                               child: ListView.builder(
                                 itemCount: question.options.length,
@@ -1139,6 +1206,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                                   final isSelected =
                                       index == _selectedOptionIndex;
 
+                                  // Determinar cores baseadas no estado
                                   Color? buttonColor;
                                   Color textColor =
                                       Colors.white; // Cor padrão do texto
@@ -1177,6 +1245,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                                         ),
                                         child: Row(
                                           children: [
+                                            // Indicador alfabético da opção
                                             Container(
                                               width: 24,
                                               height: 24,
@@ -1203,6 +1272,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                                               ),
                                             ),
                                             const SizedBox(width: 12),
+                                            // Texto da opção
                                             Expanded(
                                               child: Text(
                                                 option,
@@ -1229,6 +1299,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                 ),
               ),
 
+              // Botão para avançar (aparece após responder)
               if (_showNextButton)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 24),
@@ -1268,11 +1339,20 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
   }
 }
 
+/// Ecrã de resultados do quiz
+/// Apresenta o desempenho do utilizador após completar um quiz
+/// Mostra estatísticas detalhadas e opções de navegação
+///
+/// Funcionalidades:
+/// - Exibição de pontuação final
+/// - Contagem de respostas correctas
+/// - Feedback visual baseado no desempenho
+/// - Opções para repetir ou voltar ao menu principal
 class QuizResultScreen extends StatelessWidget {
-  final int level;
-  final int sessionScore;
-  final int totalQuestions;
-  final int correctAnswers;
+  final int level; // Nível de dificuldade concluído
+  final int sessionScore; // Pontuação obtida na sessão
+  final int totalQuestions; // Número total de perguntas
+  final int correctAnswers; // Número de respostas correctas
 
   const QuizResultScreen({
     super.key,
@@ -1284,7 +1364,7 @@ class QuizResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isPass = sessionScore > 0;
+    final isPass = sessionScore > 0; // Determina se o utilizador passou
     final color = isPass ? const Color(0xFF10B981) : const Color(0xFFEF4444);
 
     return Scaffold(
@@ -1306,12 +1386,15 @@ class QuizResultScreen extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      // Ícone de resultado (sucesso ou erro)
                       Icon(
                         isPass ? Icons.check_circle : Icons.error,
                         size: 80,
                         color: color,
                       ),
                       const SizedBox(height: 24),
+
+                      // Mensagem de resultado
                       Text(
                         isPass ? 'Parabéns!' : 'Tente Novamente',
                         style: TextStyle(
@@ -1321,6 +1404,8 @@ class QuizResultScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 16),
+
+                      // Indicação do nível concluído
                       Text(
                         'Nível $level Concluído',
                         style: const TextStyle(
@@ -1329,14 +1414,18 @@ class QuizResultScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 24),
+
+                      // Estatísticas de respostas correctas
                       Text(
-                        '$correctAnswers/$totalQuestions corretas',
+                        '$correctAnswers/$totalQuestions correctas',
                         style: const TextStyle(
                           fontSize: 20,
                           color: Colors.white,
                         ),
                       ),
                       const SizedBox(height: 8),
+
+                      // Pontuação final destacada
                       Text(
                         'Pontuação: ${sessionScore >= 0 ? '+' : ''}$sessionScore',
                         style: TextStyle(
@@ -1346,8 +1435,11 @@ class QuizResultScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 32),
+
+                      // Botões de acção
                       Row(
                         children: [
+                          // Botão para voltar ao menu principal
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
@@ -1363,6 +1455,8 @@ class QuizResultScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 12),
+
+                          // Botão para tentar novamente
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
@@ -1394,18 +1488,27 @@ class QuizResultScreen extends StatelessWidget {
   }
 }
 
+/// Ecrã de visualização da pontuação pessoal
+/// Apresenta a pontuação actual do utilizador logado
+/// Permite definir nome se ainda não foi configurado
+///
+/// Funcionalidades:
+/// - Exibição da pontuação total acumulada
+/// - Nome do jogador actual
+/// - Opção para redefinir nome do utilizador
 class ScoreScreen extends StatelessWidget {
   const ScoreScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Meu Score')),
+      appBar: AppBar(title: const Text('Minha Pontuação')),
       body: FutureBuilder<int>(
         future: ScoreManager.getCurrentUserScore(),
         builder: (context, scoreSnapshot) {
           final username = ScoreManager.getCurrentUsername();
 
+          // Indicador de carregamento
           if (scoreSnapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -1416,18 +1519,23 @@ class ScoreScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Nome do jogador
                 Text(
                   'Jogador: ${username ?? 'N/A'}',
                   style: const TextStyle(fontSize: 24),
                 ),
                 const SizedBox(height: 20),
+
+                // Pontuação actual destacada
                 Text(
-                  'Pontuação Atual: $score',
+                  'Pontuação Actual: $score',
                   style: const TextStyle(
                     fontSize: 36,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+
+                // Botão para definir nome se necessário
                 if (username == null) ...[
                   const SizedBox(height: 20),
                   ElevatedButton(
@@ -1451,6 +1559,15 @@ class ScoreScreen extends StatelessWidget {
   }
 }
 
+/// Ecrã do ranking global
+/// Apresenta os 5 melhores jogadores por pontuação
+/// Utiliza cores especiais para os primeiros 3 lugares
+///
+/// Sistema de classificação:
+/// - 1º lugar: Dourado
+/// - 2º lugar: Prateado
+/// - 3º lugar: Bronze
+/// - 4º-5º lugar: Branco padrão
 class RankingScreen extends StatelessWidget {
   const RankingScreen({super.key});
 
@@ -1461,14 +1578,18 @@ class RankingScreen extends StatelessWidget {
       body: FutureBuilder(
         future: ScoreManager.getTopScores(),
         builder: (context, snapshot) {
+          // Indicador de carregamento
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
 
           final topScores = snapshot.data ?? [];
 
+          // Mensagem quando não há dados
           if (topScores.isEmpty) {
-            return const Center(child: Text('Nenhum score registrado ainda.'));
+            return const Center(
+              child: Text('Nenhuma pontuação registada ainda.'),
+            );
           }
 
           return ListView.builder(
@@ -1476,19 +1597,22 @@ class RankingScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final entry = topScores[index];
 
-              // Define a custom color for the top 3
+              // Define cores personalizadas para o top 3
               Color rankColor;
               if (index == 0) {
-                rankColor = Colors.amber; // Gold
+                rankColor = Colors.amber; // Dourado
               } else if (index == 1) {
-                rankColor = Colors.grey; // Silver
+                rankColor = Colors.grey; // Prateado
               } else if (index == 2) {
-                rankColor = Color(0xFFCD7F32); // Bronze (custom hex color)
+                rankColor = Color(
+                  0xFFCD7F32,
+                ); // Bronze (cor hexadecimal personalizada)
               } else {
-                rankColor = Colors.white; // Default
+                rankColor = Colors.white; // Padrão
               }
 
               return ListTile(
+                // Posição no ranking
                 leading: Text(
                   '${index + 1}º',
                   style: TextStyle(
@@ -1497,10 +1621,12 @@ class RankingScreen extends StatelessWidget {
                     color: rankColor,
                   ),
                 ),
+                // Nome do utilizador
                 title: Text(
-                  entry['username'] ?? 'Unknown',
+                  entry['username'] ?? 'Desconhecido',
                   style: const TextStyle(color: Colors.white),
                 ),
+                // Pontuação do utilizador
                 trailing: Text(
                   entry['score'].toString(),
                   style: const TextStyle(
@@ -1518,6 +1644,16 @@ class RankingScreen extends StatelessWidget {
   }
 }
 
+/// Ecrã do conversor avançado de rede
+/// Ferramenta para conversão e cálculo de endereçamento IPv4
+/// Suporta tanto prefixos CIDR quanto máscaras decimais
+///
+/// Funcionalidades principais:
+/// - Cálculo de Network ID
+/// - Cálculo de endereço Broadcast
+/// - Suporte para prefixos CIDR (/24) e máscaras (255.255.255.0)
+/// - Validação de entrada robusta
+/// - Interface intuitiva com alternância entre modos
 class IpConverterScreen extends StatefulWidget {
   const IpConverterScreen({super.key});
 
@@ -1529,7 +1665,7 @@ class _IpConverterScreenState extends State<IpConverterScreen> {
   final TextEditingController _ipController = TextEditingController();
   final TextEditingController _maskOrPrefixController = TextEditingController();
   String _result = '';
-  bool _usePrefix = true;
+  bool _usePrefix = true; // Determina se usa prefixo CIDR ou máscara decimal
 
   @override
   Widget build(BuildContext context) {
@@ -1541,7 +1677,7 @@ class _IpConverterScreenState extends State<IpConverterScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Campo para IP
+              // Campo para endereço IP
               TextField(
                 controller: _ipController,
                 decoration: const InputDecoration(
@@ -1552,7 +1688,7 @@ class _IpConverterScreenState extends State<IpConverterScreen> {
               ),
               const SizedBox(height: 20),
 
-              // Switch entre Prefixo e Máscara
+              // Alternador entre prefixo e máscara
               Row(
                 children: [
                   const Text('Usar Prefixo:'),
@@ -1569,7 +1705,7 @@ class _IpConverterScreenState extends State<IpConverterScreen> {
                 ],
               ),
 
-              // Campo dinâmico (Prefixo ou Máscara)
+              // Campo dinâmico (prefixo CIDR ou máscara decimal)
               TextField(
                 controller: _maskOrPrefixController,
                 decoration: InputDecoration(
@@ -1583,7 +1719,7 @@ class _IpConverterScreenState extends State<IpConverterScreen> {
               ),
               const SizedBox(height: 20),
 
-              // Botões de ação (apenas 2 agora)
+              // Botões de acção para cálculos
               Wrap(
                 spacing: 10,
                 runSpacing: 10,
@@ -1600,7 +1736,7 @@ class _IpConverterScreenState extends State<IpConverterScreen> {
               ),
               const SizedBox(height: 20),
 
-              // Resultado
+              // Área de resultados com formatação condicional
               if (_result.isNotEmpty)
                 Container(
                   padding: const EdgeInsets.all(16),
@@ -1634,6 +1770,8 @@ class _IpConverterScreenState extends State<IpConverterScreen> {
     );
   }
 
+  /// Calcula o Network ID baseado no IP e máscara/prefixo fornecidos
+  /// Valida as entradas e apresenta o resultado formatado
   void _calculateNetworkId() {
     if (_ipController.text.isEmpty || _maskOrPrefixController.text.isEmpty) {
       setState(() {
@@ -1663,6 +1801,8 @@ class _IpConverterScreenState extends State<IpConverterScreen> {
     }
   }
 
+  /// Calcula o endereço de broadcast baseado no IP e máscara/prefixo
+  /// Utiliza as mesmas validações do Network ID
   void _calculateBroadcast() {
     if (_ipController.text.isEmpty || _maskOrPrefixController.text.isEmpty) {
       setState(() {
@@ -1692,6 +1832,11 @@ class _IpConverterScreenState extends State<IpConverterScreen> {
     }
   }
 
+  /// Obtém o comprimento do prefixo baseado no modo seleccionado
+  /// Converte máscara decimal para prefixo CIDR se necessário
+  ///
+  /// Returns: Comprimento do prefixo (0-32)
+  /// Throws: FormatException se a entrada for inválida
   int _getPrefixLength() {
     if (_usePrefix) {
       final prefix = int.parse(_maskOrPrefixController.text);
@@ -1707,6 +1852,11 @@ class _IpConverterScreenState extends State<IpConverterScreen> {
     }
   }
 
+  /// Valida se uma string representa um endereço IP válido
+  /// Verifica formato (4 octetos) e intervalo (0-255 por octeto)
+  ///
+  /// [ip]: String a ser validada como endereço IP
+  /// Returns: true se válido, false caso contrário
   bool _isValidIp(String ip) {
     final parts = ip.split('.');
     if (parts.length != 4) return false;
@@ -1722,11 +1872,17 @@ class _IpConverterScreenState extends State<IpConverterScreen> {
     }
   }
 
+  /// Valida se uma string representa uma máscara de sub-rede válida
+  /// Verifica se é um IP válido e se os bits estão em sequência correcta
+  ///
+  /// [mask]: String a ser validada como máscara
+  /// Returns: true se válida, false caso contrário
   bool _isValidSubnetMask(String mask) {
     if (!_isValidIp(mask)) return false;
 
     final maskInt = ipToInt(mask);
     var foundZero = false;
+    // Verifica se os bits 1 estão todos à esquerda (sem intercalação)
     for (var i = 31; i >= 0; i--) {
       final bit = (maskInt >> i) & 1;
       if (foundZero && bit == 1) return false;
@@ -1743,6 +1899,16 @@ class _IpConverterScreenState extends State<IpConverterScreen> {
   }
 }
 
+/// Ecrã de verificação de rede
+/// Ferramenta para verificar se dois endereços IP pertencem à mesma rede
+/// Suporta tanto prefixos CIDR quanto máscaras decimais
+///
+/// Funcionalidades principais:
+/// - Comparação de dois endereços IP
+/// - Determinação se estão na mesma rede ou sub-rede
+/// - Exibição das redes de cada IP quando diferentes
+/// - Suporte para prefixos CIDR e máscaras decimais
+/// - Feedback visual claro com ícones e cores
 class NetworkCheckScreen extends StatefulWidget {
   const NetworkCheckScreen({super.key});
 
@@ -1755,7 +1921,7 @@ class _NetworkCheckScreenState extends State<NetworkCheckScreen> {
   final TextEditingController _ip2Controller = TextEditingController();
   final TextEditingController _maskOrPrefixController = TextEditingController();
   String _checkResult = '';
-  bool _usePrefix = true;
+  bool _usePrefix = true; // Determina se usa prefixo CIDR ou máscara decimal
 
   @override
   Widget build(BuildContext context) {
@@ -1767,7 +1933,7 @@ class _NetworkCheckScreenState extends State<NetworkCheckScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Campo para IP 1
+              // Campo para o primeiro endereço IP
               TextField(
                 controller: _ip1Controller,
                 decoration: const InputDecoration(
@@ -1778,7 +1944,7 @@ class _NetworkCheckScreenState extends State<NetworkCheckScreen> {
               ),
               const SizedBox(height: 16),
 
-              // Campo para IP 2
+              // Campo para o segundo endereço IP
               TextField(
                 controller: _ip2Controller,
                 decoration: const InputDecoration(
@@ -1789,7 +1955,7 @@ class _NetworkCheckScreenState extends State<NetworkCheckScreen> {
               ),
               const SizedBox(height: 16),
 
-              // Switch entre Prefixo e Máscara
+              // Alternador entre prefixo CIDR e máscara decimal
               Row(
                 children: [
                   const Text('Usar Prefixo:'),
@@ -1806,7 +1972,7 @@ class _NetworkCheckScreenState extends State<NetworkCheckScreen> {
                 ],
               ),
 
-              // Campo dinâmico (Prefixo ou Máscara)
+              // Campo dinâmico para prefixo ou máscara
               TextField(
                 controller: _maskOrPrefixController,
                 decoration: InputDecoration(
@@ -1820,14 +1986,14 @@ class _NetworkCheckScreenState extends State<NetworkCheckScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Botão de verificação
+              // Botão principal de verificação
               ElevatedButton(
                 onPressed: _checkNetwork,
                 child: const Text('Verificar Rede'),
               ),
               const SizedBox(height: 24),
 
-              // Resultado
+              // Área de resultados com formatação condicional
               if (_checkResult.isNotEmpty)
                 Container(
                   padding: const EdgeInsets.all(16),
@@ -1862,7 +2028,11 @@ class _NetworkCheckScreenState extends State<NetworkCheckScreen> {
     );
   }
 
+  /// Verifica se os dois IPs fornecidos pertencem à mesma rede
+  /// Calcula o Network ID de ambos e compara os resultados
+  /// Apresenta feedback detalhado sobre o resultado da comparação
   void _checkNetwork() {
+    // Validação de campos obrigatórios
     if (_ip1Controller.text.isEmpty ||
         _ip2Controller.text.isEmpty ||
         _maskOrPrefixController.text.isEmpty) {
@@ -1874,12 +2044,15 @@ class _NetworkCheckScreenState extends State<NetworkCheckScreen> {
 
     try {
       final prefixLength = _getPrefixLength();
+
+      // Verifica se os IPs estão na mesma rede
       final sameNetwork = areInSameNetwork(
         _ip1Controller.text,
         _ip2Controller.text,
         prefixLength,
       );
 
+      // Calcula os Network IDs para apresentação detalhada
       final network1 = getNetworkId(_ip1Controller.text, prefixLength);
       final network2 = getNetworkId(_ip2Controller.text, prefixLength);
 
@@ -1898,6 +2071,11 @@ class _NetworkCheckScreenState extends State<NetworkCheckScreen> {
     }
   }
 
+  /// Obtém o comprimento do prefixo baseado no modo seleccionado
+  /// Idêntico ao método da classe IpConverterScreen
+  ///
+  /// Returns: Comprimento do prefixo (0-32)
+  /// Throws: Exception se a entrada for inválida
   int _getPrefixLength() {
     if (_usePrefix) {
       final prefix = int.parse(_maskOrPrefixController.text);
