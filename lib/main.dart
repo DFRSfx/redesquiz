@@ -906,6 +906,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
   late List<NetworkQuestion> questions; // Lista de perguntas do quiz
   int _currentQuestionIndex = 0; // Índice da pergunta actual
   int _sessionScore = 0; // Pontuação da sessão actual
+  int _correctAnswersCount = 0; // Contador real de respostas correctas
   int? _selectedOptionIndex; // Índice da opção seleccionada
   bool _answered = false; // Se a pergunta foi respondida
   bool _showNextButton = false; // Se deve mostrar o botão "próximo"
@@ -947,6 +948,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
 
   /// Processa a resposta do utilizador
   /// Calcula a pontuação baseada no nível e na correcção da resposta
+  /// Actualiza o contador de respostas correctas
   ///
   /// Sistema de pontuação:
   /// - Nível 1: +10 pontos (correcto) / -5 pontos (incorrecto)
@@ -963,6 +965,11 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
       _isCorrect =
           questions[_currentQuestionIndex].options[selectedIndex] ==
           questions[_currentQuestionIndex].correctAnswer;
+
+      // Actualizar contador de respostas correctas
+      if (_isCorrect) {
+        _correctAnswersCount++;
+      }
 
       // Actualizar pontuação conforme especificação
       if (_isCorrect) {
@@ -1043,16 +1050,10 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
               level: widget.level,
               sessionScore: _sessionScore,
               totalQuestions: questions.length,
-              correctAnswers: _getCorrectAnswersCount(),
+              correctAnswers: _correctAnswersCount, // Usar contador real
             ),
       ),
     );
-  }
-
-  /// Calcula o número de respostas correctas baseado na pontuação
-  /// Utiliza a pontuação por nível para estimar acertos
-  int _getCorrectAnswersCount() {
-    return _sessionScore > 0 ? (_sessionScore / (widget.level * 10)).ceil() : 0;
   }
 
   @override
