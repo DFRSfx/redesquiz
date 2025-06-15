@@ -74,7 +74,7 @@ lib/
 
 | Ecrã Inicial | Quiz | Ferramentas |  
 |--------------|------|-------------|  
-| ![Ecrã Inicial](https://media.discordapp.net/attachments/1383076662618488972/1383927279104819281/image.png?ex=68509237&is=684f40b7&hm=0c6330ee001e4df2f2f84fe394dc2b22177622e5210e1af065a0d5f8068353be&=&format=webp&quality=lossless&width=651&height=1421) | ![Quiz](https://media.discordapp.net/attachments/1383076662618488972/1383929268354154496/image.png?ex=68509411&is=684f4291&hm=e0aaed725c0c966d8a215b5a7ae3c040fd9bf72ac6f15db8aae78fa943c37274&=&format=webp&quality=lossless&width=663&height=1421) | ![Ferramentas](![alt text](image.png)) |  
+| ![Ecrã Inicial](https://media.discordapp.net/attachments/1383076662618488972/1383927279104819281/image.png?ex=68509237&is=684f40b7&hm=0c6330ee001e4df2f2f84fe394dc2b22177622e5210e1af065a0d5f8068353be&=&format=webp&quality=lossless&width=651&height=1421) | ![Quiz](https://media.discordapp.net/attachments/1383076662618488972/1383929268354154496/image.png?ex=68509411&is=684f4291&hm=e0aaed725c0c966d8a215b5a7ae3c040fd9bf72ac6f15db8aae78fa943c37274&=&format=webp&quality=lossless&width=663&height=1421) | ![Ferramentas](https://media.discordapp.net/attachments/1383076662618488972/1383929809390014725/image.png?ex=68509492&is=684f4312&hm=6bd29988bb33540464605fa4bf192c4897000a2f84eb102bb0d35fca17374768&=&format=webp&quality=lossless&width=654&height=1421) |  
 
 
 
