@@ -231,7 +231,7 @@ class NetworkQuizGenerator {
       NetworkQuestion(
         "Os IPs $ip3a e $ip3b estão na mesma super-rede com máscara $mask?",
         sameNetwork ? "Sim" : "Não",
-        ["Sim", "Não", "Apenas se for classe B", "Apenas com encaminhamento"],
+        ["Sim", "Não"],
         "Mesma Rede",
       ),
     );
